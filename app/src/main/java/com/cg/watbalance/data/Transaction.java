@@ -19,12 +19,30 @@ public class Transaction implements Serializable {
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.CANADA);
         DateTimeFormatter myDateFormat = DateTimeFormat.forPattern("MM/dd/yyyy HH:mm:ss");
         try {
+            terminal = myElement.getElementById("oneweb_financial_history_td_terminal").text();
+
             date = DateTime.parse(dateTime, myDateFormat);
-            amount = numberFormat.parse(myElement.getElementById("oneweb_financial_history_td_amount").text()).floatValue();
+            if(mealPlanVendor(terminal.substring(7))) {
+                amount = 2 * numberFormat.parse(myElement.getElementById("oneweb_financial_history_td_amount").text()).floatValue();
+            } else {
+                amount = numberFormat.parse(myElement.getElementById("oneweb_financial_history_td_amount").text()).floatValue();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        terminal = myElement.getElementById("oneweb_financial_history_td_terminal").text();
+
+    }
+
+    private boolean mealPlanVendor(String vendor) {
+        // Meal plan vendor information is found here:
+        // https://uwaterloo.ca/food-services/locations-and-hours
+        // Currently unsure of: Pastry plus, PAS lounge, Liquid Assets (Hagey hall), CEIT,
+        //                      Eye opener Cafe, University Club, Williams Fresh Cafe
+
+        return vendor.contains("WAT-FS-") ||
+                vendor.contains("STARBUCKS") ||
+                vendor.contains("BROWSERS");
     }
 
     public String getPlace() {

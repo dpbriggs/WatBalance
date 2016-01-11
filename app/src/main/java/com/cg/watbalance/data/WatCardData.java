@@ -2,6 +2,7 @@ package com.cg.watbalance.data;
 
 import android.graphics.Color;
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import org.apache.commons.lang3.text.WordUtils;
 import org.joda.time.DateTime;
@@ -44,10 +45,10 @@ public class WatCardData implements Serializable {
         }
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.CANADA);
         try {
-            MP = numberFormat.parse(myTDTags.get(7).text()).floatValue() + numberFormat.parse(myTDTags.get(14).text()).floatValue() + numberFormat.parse(myTDTags.get(21).text()).floatValue() + numberFormat.parse(myTDTags.get(49).text()).floatValue();
+            MP = 2 * numberFormat.parse(myTDTags.get(7).text()).floatValue() + numberFormat.parse(myTDTags.get(14).text()).floatValue() + numberFormat.parse(myTDTags.get(21).text()).floatValue() + numberFormat.parse(myTDTags.get(49).text()).floatValue();
             FD = numberFormat.parse(myTDTags.get(42).text()).floatValue() + numberFormat.parse(myTDTags.get(35).text()).floatValue() + numberFormat.parse(myTDTags.get(28).text()).floatValue();
             Other = numberFormat.parse(myTDTags.get(56).text()).floatValue() + numberFormat.parse(myTDTags.get(63).text()).floatValue() + numberFormat.parse(myTDTags.get(70).text()).floatValue() + numberFormat.parse(myTDTags.get(77).text()).floatValue() + numberFormat.parse(myTDTags.get(84).text()).floatValue();
-            Total = numberFormat.parse(myTDTags.get(91).text().substring(2)).floatValue();
+            Total = MP + FD + Other;
             Date = DateTime.now();
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,7 +109,7 @@ public class WatCardData implements Serializable {
         Float totalAmt = Float.parseFloat("0");
         for (int i = 0; i < myTransHistory.size(); i++) {
             if (myTransHistory.get(i).getDate().withTimeAtStartOfDay().equals(DateTime.now().withTimeAtStartOfDay())) {
-                totalAmt += myTransHistory.get(i).getAmount();
+                    totalAmt += myTransHistory.get(i).getAmount();
             }
         }
         DateTime endOfTerm = new DateTime(2016, 4, 23, 0, 0);
